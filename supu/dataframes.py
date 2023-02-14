@@ -1,5 +1,6 @@
 import pandas as pd
-import statsmodels.stats.api as sms
+
+from supu.statistics import confidence_interval
 
 
 def describe_with_ci(df: pd.DataFrame, confidence: float = 0.95) -> pd.DataFrame:
@@ -15,7 +16,10 @@ def describe_with_ci(df: pd.DataFrame, confidence: float = 0.95) -> pd.DataFrame
     groupby = df.groupby(level=levels)
     groups = dict(list(groupby))
     cis = pd.DataFrame(
-        [sms.DescrStatsW(g[d]).tconfint_mean(1 - confidence) for g in groups.values()],
+        [
+            confidence_interval(g[d], confidence_level=confidence)
+            for g in groups.values()
+        ],
         index=list(groups.keys()),
         columns=["lower_ci", "upper_ci"],
     )
