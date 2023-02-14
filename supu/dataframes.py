@@ -14,9 +14,8 @@ def describe_series_with_ci(data: pd.Series, **kwargs) -> pd.DataFrame:
     groupby = data.groupby(level=levels)
     desc = groupby.describe()
     cis = pd.DataFrame(
-        groupby.apply(confidence_interval, **kwargs).tolist(),
+        groupby.apply(confidence_interval, **kwargs).unstack(-1),
         index=desc.index,
-        columns=["lower_ci", "upper_ci"],
     )
     return pd.concat([desc, cis], axis=1)
 
