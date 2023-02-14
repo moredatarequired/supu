@@ -12,14 +12,13 @@ def describe_series_with_ci(data: pd.Series, **kwargs) -> pd.DataFrame:
     """
     levels = tuple(range(data.index.nlevels))
     groupby = data.groupby(level=levels)
-    groups = dict(list(groupby))
+    desc = groupby.describe()
     cis = pd.DataFrame(
-        [confidence_interval(g, **kwargs) for g in groups.values()],
-        index=list(groups.keys()),
+        groupby.apply(confidence_interval, **kwargs).tolist(),
+        index=desc.index,
         columns=["lower_ci", "upper_ci"],
     )
-    desc = groupby.describe()
-    return pd.concat([desc, cis], axis=1).set_index(desc.index)
+    return pd.concat([desc, cis], axis=1)
 
 
 def describe_dataframe_with_ci(data: pd.DataFrame, **kwargs) -> pd.DataFrame:
