@@ -77,3 +77,10 @@ def test_describe_dataframe_with_ci_multiindex(multiindex_results):
     # We should have some values outside the confidence interval, but not too many.
     assert ((desc["min"] < desc["lower_ci"]) & (desc["lower_ci"] < desc["mean"])).all()
     assert ((desc["mean"] < desc["upper_ci"]) & (desc["upper_ci"] < desc["max"])).all()
+
+
+def test_describe_dataframe_with_ci_no_names(multiindex_results):
+    noindex = [None] * len(multiindex_results.index.names)
+    multiindex_results.index.names = noindex
+    desc = dataframes.describe_dataframe_with_ci(multiindex_results, n_resamples=100)
+    assert desc.index.names == [*noindex, None]

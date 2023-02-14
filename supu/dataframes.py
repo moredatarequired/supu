@@ -29,6 +29,6 @@ def describe_dataframe_with_ci(data: pd.DataFrame, **kwargs) -> pd.DataFrame:
     with the addition of two rows for the lower and upper bounds of the 95% confidence
     interval.
     """
-    ids = data.index.names
-    series = data.reset_index().melt(id_vars=ids).set_index([*ids, "variable"])["value"]
-    return describe_series_with_ci(series, **kwargs)
+    stacked = data.stack()
+    stacked = stacked if isinstance(stacked, pd.Series) else stacked[0]
+    return describe_series_with_ci(stacked, **kwargs)
