@@ -18,7 +18,7 @@ def test_confidence_interval():
 
 def test_confidence_interval_random():
     rng = np.random.default_rng(0)
-    data = rng.normal(size=(100, 1000))
+    data = rng.normal(size=(100, 2000))
     ci = statistics.confidence_interval(data, n_resamples=100)
     correct = ((ci.low < 0) & (ci.high > 0)).sum()
     assert 90 < correct < 100

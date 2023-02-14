@@ -1,17 +1,13 @@
-from typing import Any, NamedTuple, Union
+from typing import Any, NamedTuple, Sequence, Union
 
 import numpy as np
 from scipy.stats import bootstrap
 
-try:
-    from collections.abc import Sequence
-except ImportError:
-    from typing import Sequence
-
 
 def confidence_interval(data: Union[Sequence, Any], **kwargs) -> NamedTuple:
     """Return the confidence interval for the mean of the data."""
-    if not isinstance(data[0], Sequence):
+    if len(data) != 1:
+        # The data should be a sequence of samples, not a single sample.
         data = [data]
     return bootstrap(
         data, np.mean, vectorized=True, axis=-1, **kwargs
