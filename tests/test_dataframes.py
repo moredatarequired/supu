@@ -27,10 +27,11 @@ def multiindex_results():
 @pytest.mark.parametrize("column", ["a", "b", "c"])
 @pytest.mark.parametrize("confidence", [0.95, 0.99])
 def test_describe_series_with_ci_multiindex(column, confidence, multiindex_results):
+    series = multiindex_results[column]
     desc = dataframes.describe_series_with_ci(
-        multiindex_results[column], confidence_level=confidence, n_resamples=100
+        series, confidence_level=confidence, n_resamples=100
     )
-    assert set(desc.index) == set(multiindex_results.index)
+    assert set(desc.index) == set(series.index)
     assert list(desc.columns) == [
         "count",
         "mean",
@@ -43,6 +44,8 @@ def test_describe_series_with_ci_multiindex(column, confidence, multiindex_resul
         "lower_ci",
         "upper_ci",
     ]
+    vanilla_descrbe = series.groupby(level=(0, 1, 2)).describe()
+    assert (vanilla_descrbe == desc[list(vanilla_descrbe.columns)]).all().all()
     # We should have some values outside the confidence interval, but not too many.
     assert ((desc["min"] < desc["lower_ci"]) & (desc["lower_ci"] < desc["mean"])).all()
     assert ((desc["mean"] < desc["upper_ci"]) & (desc["upper_ci"] < desc["max"])).all()
