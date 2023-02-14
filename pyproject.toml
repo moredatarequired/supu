@@ -1,9 +1,25 @@
 [tool.poetry]
 name = "supu"
 version = "0.1.0"
-description = ""
+description = "Slightly Useful Python Utility functions"
+license = "MIT"
 authors = ["Hugh Wimberly <hugh.wimberly@gmail.com>"]
 readme = "README.md"
+repository = "https://github.com/moredatarequired/supu"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+include = ["supu/**/*.py"]
 
 [tool.poetry.dependencies]
 python = "^3.8,<3.12"
